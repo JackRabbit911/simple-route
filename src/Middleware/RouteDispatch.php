@@ -3,7 +3,7 @@
 namespace Az\Route\Middleware;
 
 use Az\Route\NormalizeResponse;
-use Az\Route\SimpleRoute as Route;
+use Az\Route\Route;
 use Invoker\InvokerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
