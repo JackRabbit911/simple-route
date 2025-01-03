@@ -68,6 +68,7 @@ class Route
     public function setParameters($params)
     {
         $this->parameters = array_replace($this->parameters, array_filter($params));
+        unset($this->parameters['action']);
     }
 
     public function getParameters(): array
