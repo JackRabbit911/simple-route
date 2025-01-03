@@ -1,0 +1,36 @@
+{
+    "name": "alpha-zeta/simple-route",
+    "description": "Simple, fast, modern and flexible routing library",
+    "keywords": ["php", "route", "routing"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexey Zaytsev",
+            "email": "world.zay@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "psr/http-message": "^1.0 || ^2.0",
+        "psr/http-server-middleware": "^1.0",
+        "psr/http-server-handler": "^1.0",
+        "psr/container": "^1.1 || ^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Az\\Route\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11",
+        "mockery/mockery": "^1.6",
+        "httpsoft/http-message": "^1.0",
+        "httpsoft/http-server-request": "^1.0"
+    },
+    "autoload-dev": {
+        "psr-4": { 
+            "Tests\\Az\\Route\\": "tests/"
+        }
+    }
+}
