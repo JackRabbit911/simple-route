@@ -10,11 +10,9 @@ class Matcher
     private const ROOT_PATH_PATTERN = '\/?';
 
     private array $delimeters = [];
-    private array $tokens = [];
 
-    public function match($pattern, $path, $tokens = [])
+    public function match($pattern, $path)
     {
-        $this->tokens = $tokens;
         $pattern = $this->santizePattern($pattern);
         $path = rawurldecode(rtrim($path, '/'));
 
@@ -51,10 +49,7 @@ class Matcher
             return $params[$parameter];
         }, $pattern);
 
-        $path = preg_replace('~\/{2,}~', '/', $path);
-        $uri_prefix = $GLOBALS['URI_PREFIX'] ?? '/';
-
-        return $uri_prefix . trim($path, '/');
+        return preg_replace('~\/{2,}~', '/', $path);
     }
 
     private function santizePattern(string $pattern)
@@ -81,8 +76,7 @@ class Matcher
 
     private function getReplacement(string $parameter): string
     {
-        return '(?P<' . $parameter . '>' . ($this->tokens[$parameter] ?? self::DEFAULT_TOKEN) . ')';
-        // return '(?P<' . $parameter . '>' . ($this->route->getTokens()[$parameter] ?? self::DEFAULT_TOKEN) . ')';
+        return '(?P<' . $parameter . '>' . self::DEFAULT_TOKEN . ')';
     }
 
     private function getOptionalReplacement(string $parameter): string
