@@ -3,7 +3,6 @@
 namespace Az\Route\Middleware;
 
 use Az\Route\RouterInterface;
-use Az\Route\NormalizeResponse;
 use Az\Route\Route;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,8 +11,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class RouteMatch implements MiddlewareInterface
 {
-    use NormalizeResponse;
-
     private RouterInterface $router;
 
     public function __construct(RouterInterface $router)
