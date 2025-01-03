@@ -3,6 +3,7 @@
 namespace Az\Route;
 
 use ReflectionClass;
+use ReflectionObject;
 use ReflectionFunction;
 use Closure;
 use Error;
@@ -35,8 +36,12 @@ class RouteFactory
             }
 
             $handler[1] = $handler[1] ?? $parameters['action'] ?? '__invoke';
+        }
 
-            return $handler;
+        if (is_object($handler) && !$handler instanceof Closure) {
+            $h[0] = $handler;
+            $h[1] = $parameters['action'] ?? '__invoke';
+            $handler = $h;
         }
         
         return $handler;
@@ -45,7 +50,9 @@ class RouteFactory
     public function reflect($handler)
     {
         if (is_array($handler) && method_exists($handler[0], $handler[1])) {
-            $this->reflect['class'] = new ReflectionClass($handler[0]);
+            $this->reflect['class'] = (is_object($handler[0])) 
+                ? new ReflectionObject($handler[0])
+                : new ReflectionClass($handler[0]);
             $this->reflect['method'] = $this->reflect['class']->getMethod($handler[1]);
         } elseif ($handler instanceof Closure || is_string($handler) && function_exists($handler)) {
             $this->reflect['func'] = new ReflectionFunction($handler);
