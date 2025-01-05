@@ -47,15 +47,22 @@ class Router implements RouterInterface
             if ($params !== false) {
                 $handler = $this->factory->handler($handler, $params);
                 $this->reflect = $this->factory->reflect($handler);
-
+                
                 if (!$this->reflect) {
-                    return false;
+                    continue;
                 }
-
+                
+                $methods = $item[2] ?? ['get'];
                 $route = $this->factory->create($handler, $methods);
                 $route->setParameters($params);
 
-                return $this->check($route, $request);
+                $route = $this->check($route, $request);
+
+                if (!$route) {
+                    continue;
+                }
+                
+                return $route;
             }
         }
 
