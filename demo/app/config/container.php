@@ -1,5 +1,9 @@
 <?php
 
+use Az\Route\Matcher;
+use Az\Route\RouteFactory;
+use Az\Route\Router;
+use Az\Route\RouterInterface;
 use HttpSoft\Emitter\EmitterInterface;
 use HttpSoft\Emitter\SapiEmitter;
 use HttpSoft\Runner\MiddlewarePipeline;
@@ -15,4 +19,6 @@ return [
     MiddlewarePipelineInterface::class => fn() => new MiddlewarePipeline(),
     MiddlewareResolverInterface::class => fn(ContainerInterface $c) => new MiddlewareResolver($c),
     EmitterInterface::class => fn() => new SapiEmitter(),
+    RouterInterface::class => fn(ContainerInterface $c) 
+        => new Router($c->get(Matcher::class), $c->get(RouteFactory::class)),
 ];

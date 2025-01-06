@@ -32,6 +32,7 @@ class App
 
     public function run(): void
     {
+        require '../app/config/pipeline.php';
         $response = $this->pipeline->process($this->request, self::defaultHandler());
         $this->emitter->emit($response);
     }
