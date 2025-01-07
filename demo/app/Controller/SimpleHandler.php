@@ -12,7 +12,7 @@ class SimpleHandler
         return new HtmlResponse('Articles list');
     }
 
-    #[Route(tokens: ['id' => '\d+'])]
+    // #[Route(methods: ['post', 'put'])]
     public function show($id)
     {
         return new HtmlResponse('Article ' . $id);

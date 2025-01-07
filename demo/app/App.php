@@ -54,7 +54,17 @@ class App
             public function handle(ServerRequestInterface $request): ResponseInterface
             {
                 $code = $request->getAttribute('status_code') ?? 404;
-                return new HtmlResponse($this->reasonPhrase[$code], $code);
+                $headers = $request->getAttribute('headers');
+
+                $response = new HtmlResponse($this->reasonPhrase[$code], $code);
+
+                if ($headers) {
+                    foreach ($headers as $name => $value) {
+                        $response = $response->withAddedHeader($name, $value);
+                    }
+                }
+
+                return $response;
             }
         };
     }
