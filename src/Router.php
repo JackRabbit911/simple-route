@@ -40,9 +40,9 @@ class Router implements RouterInterface
 
         foreach ($this->routes as $name => $item) {
             [$pattern, $handler] = $item;
-            $methods = $item[2] ?? ['get'];
+            $tokens = $item[2] ?? [];
 
-            $params = $this->matcher->match($pattern, $path);
+            $params = $this->matcher->match($pattern, $path, $tokens);
 
             if ($params !== false) {
                 $handler = $this->factory->handler($handler, $params);
@@ -52,8 +52,7 @@ class Router implements RouterInterface
                     continue;
                 }
                 
-                $methods = $item[2] ?? ['get'];
-                $route = $this->factory->create($handler, $methods);
+                $route = $this->factory->create($handler, $tokens);
                 $route->setParameters($params);
 
                 $route = $this->check($route, $request);

@@ -12,9 +12,11 @@ class RouteFactory
 {
     private array $reflect = [];
 
-    public function create($handler, $methods)
+    public function create($handler, $tokens)
     {
-        $route = new Route($handler, $methods);
+        $route = new Route($handler, $tokens);
+        $route->methods('get');
+        
         $attributes = $this->attributes();
         $this->setByAttribute($route, $attributes);
 

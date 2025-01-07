@@ -11,9 +11,9 @@ class Matcher
 
     private array $delimeters = [];
 
-    public function match($pattern, $path)
+    public function match(string $pattern, string $path, array $tokens)
     {
-        $pattern = $this->santizePattern($pattern);
+        $pattern = $this->santizePattern($pattern, $tokens);
         $path = rawurldecode(rtrim($path, '/'));
 
         if (preg_match('~^' . $pattern . '$~i', $path, $matches)) {
@@ -52,7 +52,7 @@ class Matcher
         return preg_replace('~\/{2,}~', '/', $path);
     }
 
-    private function santizePattern(string $pattern)
+    private function santizePattern(string $pattern, array $tokens)
     {
         $pattern = str_replace(['+', '~'], ['\+', '\~'], $pattern);
         $pattern = '/' . trim($pattern, '/');
@@ -63,23 +63,23 @@ class Matcher
         }, $pattern);
 
         return !($pattern === '' || $pattern === '/') // !is root path
-            ? preg_replace_callback(self::PLACEHOLDER, function (array $matches): string {
+            ? preg_replace_callback(self::PLACEHOLDER, function (array $matches) use ($tokens): string {
                 $parameter = $matches[1];
 
                 return (substr((string) $parameter, -1) === '?') // is optional parameter
-                    ? $this->getOptionalReplacement($parameter)
-                    : $this->getReplacement($parameter)
+                    ? $this->getOptionalReplacement($parameter, $tokens)
+                    : $this->getReplacement($parameter, $tokens)
                 ;
             }, $pattern)
             : self::ROOT_PATH_PATTERN;
     }
 
-    private function getReplacement(string $parameter): string
+    private function getReplacement(string $parameter, array $tokens): string
     {
-        return '(?P<' . $parameter . '>' . self::DEFAULT_TOKEN . ')';
+        return '(?P<' . $parameter . '>' . ($tokens[$parameter] ?? self::DEFAULT_TOKEN) . ')';
     }
 
-    private function getOptionalReplacement(string $parameter): string
+    private function getOptionalReplacement(string $parameter, array $tokens): string
     {
         $head = $tail = '';
 
@@ -89,7 +89,7 @@ class Matcher
             $delimeter = ($k === 0)
                 ? array_shift($this->delimeters)
                 : array_shift($parsedOptionalParameters['delimeters']);
-            $head .= '(?:'. $delimeter . $this->getReplacement($parameter);
+            $head .= '(?:'. $delimeter . $this->getReplacement($parameter, $tokens);
             $tail .= ')?';
         }
 

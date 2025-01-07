@@ -12,10 +12,10 @@ class Route
     private array $filters = [];
     private ?bool $ajax = null;
 
-    public function __construct($handler, $methods)
+    public function __construct($handler, $tokens)
     {
         $this->handler = $handler;
-        $this->methods($methods);
+        $this->tokens($tokens);
     }
 
     public function methods($methods)
