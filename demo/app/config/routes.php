@@ -1,8 +1,12 @@
 <?php
 
+use App\Controller\SimpleController;
+use App\Controller\SimpleHandler;
 use HttpSoft\Response\HtmlResponse;
 
 return [
     'home'      => ['/', fn() => new HtmlResponse("Hello, world!")],
-    'articles'  => ['/articles', fn() => new HtmlResponse('Articles page'), 'post'],
+    'articles'  => ['/articles', SimpleHandler::class],
+    'article'   => ['/article/{id}', [SimpleHandler::class, 'show']],
+    'about'     => ['/about/{action?}', SimpleController::class],
 ];
