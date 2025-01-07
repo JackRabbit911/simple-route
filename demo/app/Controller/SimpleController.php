@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\AboutRepo;
 use HttpSoft\Response\HtmlResponse;
 
 class SimpleController extends RequestHandler
@@ -10,10 +11,11 @@ class SimpleController extends RequestHandler
     {
         return new HtmlResponse('About Page');
     }
-    
-    public function us()
+
+    public function us(AboutRepo $repo)
     {
-        return new HtmlResponse('About Us');
+        $str = $repo->getAboutUs();
+        return new HtmlResponse($str);
     }
 
     public function project()
