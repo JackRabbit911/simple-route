@@ -28,6 +28,8 @@ class App
         $this->pipeline = $pipeline;
         $this->resolver = $resolver;
         $this->emitter = $emitter;
+
+        require '../app/library.php';
     }
 
     public function run(): void
@@ -56,7 +58,13 @@ class App
                 $code = $request->getAttribute('status_code') ?? 404;
                 $headers = $request->getAttribute('headers');
 
-                $response = new HtmlResponse($this->reasonPhrase[$code], $code);
+                $data = [
+                    'code' => $code,
+                    'msg' => $this->reasonPhrase[$code],
+                ];
+
+                $str = render('../app/views/error.php', $data);
+                $response = new HtmlResponse($str);
 
                 if ($headers) {
                     foreach ($headers as $name => $value) {
