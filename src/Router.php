@@ -85,7 +85,7 @@ class Router implements RouterInterface
             }
         }
 
-        if (!in_array($request->getMethod(), $methods, true)) {
+        if (!empty($methods) && !in_array($request->getMethod(), $methods, true)) {
             $this->allowedMethods = implode(', ', array_unique(array_filter($methods)));
             return false;
         }

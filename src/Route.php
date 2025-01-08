@@ -25,6 +25,11 @@ class Route
         }
 
         $this->methods = array_map(fn ($v) => strtoupper($v), $methods);
+
+        if (in_array('ANY', $this->methods)) {
+            $this->methods = [];
+        }
+        
         return $this;
     }
 

@@ -5,6 +5,7 @@ namespace App\Controller;
 use Az\Route\Route;
 use HttpSoft\Response\HtmlResponse;
 
+#[Route(methods: 'any')]
 class SimpleHandler
 {
     public function __invoke()
