@@ -13,6 +13,8 @@ use HttpSoft\Runner\MiddlewareResolverInterface;
 use HttpSoft\ServerRequest\ServerRequestCreator;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\ContainerInterface;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 return [
     ServerRequestInterface::class => fn() => (new ServerRequestCreator())->create(),
@@ -21,4 +23,8 @@ return [
     EmitterInterface::class => fn() => new SapiEmitter(),
     RouterInterface::class => fn(ContainerInterface $c) 
         => new Router($c->get(Matcher::class), $c->get(RouteFactory::class)),
+    'tpl' => function () {
+        $loader = new FilesystemLoader('../app/views');
+        return new Environment($loader);
+    },
 ];
