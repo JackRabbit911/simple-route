@@ -1,2 +1,7 @@
 composer.phar
 /vendor/*
+/node_modules/*
+package-lock.json
+package.json
+tailwind.config.js
+/public/assets/input.css
