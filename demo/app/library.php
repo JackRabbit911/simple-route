@@ -18,11 +18,11 @@ function container()
     return $container;
 }
 
-function view(string $file, array $data = [])
+function view(string $file, array $data = [], $reponse_interface = true)
 {
     $tpl = container()->get(Environment::class);
     $str = $tpl->render($file, $data);
-    return new HtmlResponse($str);
+    return $reponse_interface ? new HtmlResponse($str) : $str;
 }
 
 function path(string $routeName, array $params = [])
