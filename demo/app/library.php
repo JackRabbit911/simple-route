@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
+use Az\Route\RouterInterface;
 use HttpSoft\Response\HtmlResponse;
+use Twig\Environment;
 
 function render($file, $data)
 {
@@ -18,7 +20,13 @@ function container()
 
 function view(string $file, array $data = [])
 {
-    $tpl = container()->get('tpl');
+    $tpl = container()->get(Environment::class);
     $str = $tpl->render($file, $data);
     return new HtmlResponse($str);
+}
+
+function path(string $routeName, array $params = [])
+{
+    $router = container()->get(RouterInterface::class);
+    return $router->path($routeName, $params);
 }

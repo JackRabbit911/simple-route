@@ -23,7 +23,7 @@ return [
     EmitterInterface::class => fn() => new SapiEmitter(),
     RouterInterface::class => fn(ContainerInterface $c) 
         => new Router($c->get(Matcher::class), $c->get(RouteFactory::class)),
-    'tpl' => function () {
+    Environment::class => function () {
         $loader = new FilesystemLoader('../app/views');
         return new Environment($loader);
     },
