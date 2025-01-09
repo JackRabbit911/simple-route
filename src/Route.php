@@ -48,7 +48,7 @@ class Route
         return $this;
     }
 
-    public function filter(callable|array $filter): self
+    public function filter(callable|array|string $filter): self
     {
         $this->filters[] = $filter;
         return $this;
