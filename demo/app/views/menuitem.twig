@@ -1,0 +1,15 @@
+{% macro menuitem(item) %}
+{% if active(item.href) == true %}
+{% set active = 'active' %}
+{% else %}
+{% set active = '' %}
+{% endif %}
+{% if item.route == 'article' %}
+{% set margin = 'ms-16' %}
+{% endif %}
+<li class="{{ margin }}"><a href="{{ item.href }}" class="{{ active }}">
+
+        <div>{{ item.title }}</div>
+
+</a></li>
+{% endmacro %}
