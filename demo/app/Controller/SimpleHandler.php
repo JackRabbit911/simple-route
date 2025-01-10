@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Repository\ArticlesRepo;
 use Az\Route\Route;
+use HttpSoft\Response\HtmlResponse;
 
-#[Route(methods: 'any')]
 class SimpleHandler
 {
     private ArticlesRepo $repo;
@@ -19,6 +19,17 @@ class SimpleHandler
 
     public function __invoke()
     {
+        $data = [
+            'title' => 'Homepage',
+            'menu'  => $this->menu,
+            'cont'  => '',
+        ];
+
+        return view('home.twig', $data);
+    }
+
+    public function list()
+    {
         $list = $this->repo->getList();
 
         $data = [
@@ -30,6 +41,7 @@ class SimpleHandler
         return view('home.twig', $data);
     }
 
+    #[Route(tokens: ['id' => '\d+'])]
     #[Route(filter: __NAMESPACE__ . '\is_set')]
     public function show($id)
     {
@@ -42,6 +54,12 @@ class SimpleHandler
         ];
         
         return view('home.twig', $data);
+    }
+
+    #[Route(methods: 'post')]
+    public function save()
+    {
+        return new HtmlResponse('Saved!');
     }
 }
 
