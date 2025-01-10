@@ -2,24 +2,49 @@
 
 namespace App\Controller;
 
-use App\Repository\AboutRepo;
-use HttpSoft\Response\HtmlResponse;
+use Az\Route\Route;
+use Psr\Http\Message\ServerRequestInterface;
 
-class SimpleController extends RequestHandler
+class SimpleController
 {
-    public function __invoke()
+    private array $data;
+
+    public function __construct(ServerRequestInterface $request)
     {
-        return new HtmlResponse('About Page');
+        $this->data['menu'] = require '../app/config/menu.php';
+        $this->data['method'] = $request->getMethod();
     }
 
-    public function us(AboutRepo $repo)
+    public function __invoke()
     {
-        $str = $repo->getAboutUs();
-        return new HtmlResponse($str);
+        $this->data['title'] = 'About page';
+        $this->data['pattern'] = '/about/{action?}';
+        $this->data['handler'] = __METHOD__;
+        return view('home.twig', $this->data);
+    }
+
+    public function us()
+    {
+        $this->data['title'] = 'About Us';
+        $this->data['pattern'] = '/about/{action?}';
+        $this->data['handler'] = __METHOD__;
+        return view('home.twig', $this->data);
     }
 
     public function project()
     {
-        return new HtmlResponse('About Project');
+        $this->data['title'] = 'About Project';
+        $this->data['pattern'] = '/about/{action?}';
+        $this->data['handler'] = __METHOD__;
+        return view('home.twig', $this->data);
+    }
+
+    #[Route(methods: 'post')]
+    public function save()
+    {
+        $this->data['title'] = 'Saved!';
+        $this->data['pattern'] = '/about/project';
+        $this->data['handler'] = __METHOD__;
+        return view('home.twig', $this->data);
     }
 }

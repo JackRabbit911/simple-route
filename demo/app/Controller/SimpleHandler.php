@@ -18,10 +18,17 @@ class SimpleHandler extends RequestHandler
         $this->data['menu'] = require '../app/config/menu.php';      
     }
 
+    protected function _before($params)
+    {
+        $this->data['method'] = $this->request->getMethod();
+    }
+
     public function __invoke()
     {
         $this->data['title'] = 'Homepage';
-        $this->data['cont'] = '';
+        $this->data['content'] = '';
+        $this->data['pattern'] = '/';
+        $this->data['handler'] = __METHOD__;
 
         return $this->data;
     }
@@ -31,7 +38,9 @@ class SimpleHandler extends RequestHandler
         $list = $this->repo->getList();
 
         $this->data['title'] = 'Articles list';
-        $this->data['cont'] = view('list.twig', ['list' => $list], false);
+        $this->data['content'] = view('list.twig', ['list' => $list], false);
+        $this->data['pattern'] = '/articles';
+        $this->data['handler'] = __METHOD__;
 
         return $this->data;
     }
@@ -43,7 +52,9 @@ class SimpleHandler extends RequestHandler
         $article = $this->repo->getArticle($id);
 
         $this->data['title'] = 'Article ' . $id;
-        $this->data['cont'] = view('article.twig', $article, false);
+        $this->data['content'] = view('article.twig', $article, false);
+        $this->data['pattern'] = '/article/{id}/{slug?}';
+        $this->data['handler'] = __METHOD__;
 
         return $this->data;
     }
