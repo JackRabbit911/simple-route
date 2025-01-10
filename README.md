@@ -8,21 +8,6 @@ composer require alpha-zeta/simple-route
 ```
 
 ## Usage
-In the dependency container:
-```php
-...
-use Az\Route\RouterInterface;
-use Az\Route\Matcher;
-use Az\Route\RouteFactory;
-...
-
-return [
-    ...
-    RouterInterface::class => fn(ContainerInterface $c) 
-        => new Router($c->get($c->get(Matcher::class), $c->get(RouteFactory::class))),
-    ...
-]
-```
 anywhere, ../config/routes.php, for example:
 ```php
 return [
@@ -44,6 +29,36 @@ use Az\Route\Route;
 public function save()
 {
 }
+```
+anywhere:
+```php
+use Az\Route\Router;
+use Az\Route\Resolver;
+...
+$router = new Router('../config/routes.php', '../module/routes.php');
+
+if (!$route = $this->router->match($request)) {
+    //abort(404)
+}
+
+$handler = $route->getInstance($container);
+
+$response = $handler->handle($request);
+```
+
+In the dependency container:
+```php
+...
+use Az\Route\RouterInterface;
+use Az\Route\Matcher;
+use Az\Route\RouteFactory;
+...
+
+return [
+    ...
+    RouterInterface::class => fn() => new Router(),
+    ...
+]
 ```
 
 anywhere, for example, in middleware RouteBootstrap.php:
