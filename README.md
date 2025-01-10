@@ -2,7 +2,7 @@
 simple, fast, modern, flexible PHP routing. PSR-7, PSR-15 compatible. 
 
 ## Installation
-This package requires PHP version 7.4 or later.
+This package requires PHP version 8.2 or later.
 ```
 composer require alpha-zeta/simple-route
 ```
@@ -33,7 +33,6 @@ public function save()
 anywhere:
 ```php
 use Az\Route\Router;
-use Az\Route\Resolver;
 ...
 $router = new Router('../config/routes.php', '../module/routes.php');
 
@@ -42,16 +41,14 @@ if (!$route = $this->router->match($request)) {
 }
 
 $handler = $route->getInstance($container);
-
 $response = $handler->handle($request);
 ```
 
+When using a dependency container and pipeline
 In the dependency container:
 ```php
 ...
 use Az\Route\RouterInterface;
-use Az\Route\Matcher;
-use Az\Route\RouteFactory;
 ...
 
 return [
