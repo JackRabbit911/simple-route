@@ -24,10 +24,21 @@ abstract class RequestHandler implements RequestHandlerInterface
         [$class, $method] = $this->route->getHandler();
         $params = $this->route->getParameters();
 
+        $this->_before($params);
+
         if (method_exists($this->container, 'call')) {
-            return $this->container->call([$this, $method], $params);
+            $response = $this->container->call([$this, $method], $params);
+        } else {
+            $response = call_user_func_array([$this, $method], array_values($params));
         }
 
-        return call_user_func_array([$this, $method], array_values($params));
+        return $this->_after($response);
+    }
+
+    protected function _before(array $params) {}
+
+    protected function _after($response)
+    {
+        return $response;
     }
 }

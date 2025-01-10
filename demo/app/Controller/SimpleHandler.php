@@ -5,40 +5,35 @@ namespace App\Controller;
 use App\Repository\ArticlesRepo;
 use Az\Route\Route;
 use HttpSoft\Response\HtmlResponse;
+use Psr\Http\Message\ResponseInterface;
 
-class SimpleHandler
+class SimpleHandler extends RequestHandler
 {
     private ArticlesRepo $repo;
-    private array $menu;
+    private array $data;
 
     public function __construct(ArticlesRepo $repo)
     {
         $this->repo = $repo;
-        $this->menu = require '../app/config/menu.php';
+        $this->data['menu'] = require '../app/config/menu.php';      
     }
 
     public function __invoke()
     {
-        $data = [
-            'title' => 'Homepage',
-            'menu'  => $this->menu,
-            'cont'  => '',
-        ];
+        $this->data['title'] = 'Homepage';
+        $this->data['cont'] = '';
 
-        return view('home.twig', $data);
+        return $this->data;
     }
 
     public function list()
     {
         $list = $this->repo->getList();
 
-        $data = [
-            'title' => 'Articles list',
-            'menu'  => $this->menu,
-            'cont'  => view('list.twig', ['list' => $list], false),
-        ];
+        $this->data['title'] = 'Articles list';
+        $this->data['cont'] = view('list.twig', ['list' => $list], false);
 
-        return view('home.twig', $data);
+        return $this->data;
     }
 
     #[Route(tokens: ['id' => '\d+'])]
@@ -47,19 +42,21 @@ class SimpleHandler
     {
         $article = $this->repo->getArticle($id);
 
-        $data = [
-            'title' => 'Article ' . $id,
-            'menu'  => $this->menu,
-            'cont'  => view('article.twig', $article, false),
-        ];
-        
-        return view('home.twig', $data);
+        $this->data['title'] = 'Article ' . $id;
+        $this->data['cont'] = view('article.twig', $article, false);
+
+        return $this->data;
     }
 
     #[Route(methods: 'post')]
     public function save()
     {
         return new HtmlResponse('Saved!');
+    }
+
+    protected function _after($data)
+    {
+        return ($data instanceof ResponseInterface) ? $data : view('home.twig', $data);
     }
 }
 
