@@ -25,7 +25,7 @@ class TemplateSettings implements MiddlewareInterface
 
         $this->twig->addFunction(new TwigFunction(
             'active', function ($href) use ($path) {
-                return str_starts_with($href, $path);
+                return $href === $path;
             }));
 
         $this->twig->addFunction(new TwigFunction(
