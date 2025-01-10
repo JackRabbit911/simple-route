@@ -44,7 +44,7 @@ $handler = $route->getInstance($container);
 $response = $handler->handle($request);
 ```
 
-When using a dependency container and pipeline
+#### When using a dependency container and pipeline
 In the dependency container:
 ```php
 ...
@@ -86,3 +86,8 @@ $this->pipe(RouteBootstrap::class);
 $this->pipe(RouteMatch::class);
 $this->pipe(RouteDispatch::class);
 ```
+## Features
+- Very simple record for route: 
+  ```php
+  'name' => [pattern, handler, tokens],
+  ```
