@@ -91,3 +91,20 @@ $this->pipe(RouteDispatch::class);
   ```php
   'name' => [pattern, handler, tokens],
   ```
+- Fine-tuning of the route is done through attributes:
+  ```php
+  ...
+  use Az\Route\Route;
+  ...
+  #[Route(methods: 'any')]
+  #[Route(host: 'localhost')]
+  class ClassName
+  {
+    #[Route(filter: 'some_function')]
+    #[Route(ajax: false, tokens: '\d+')]
+    public function show($id)
+
+    #[Route(methods: 'post')]
+    public function save($id = null)
+  }
+  ```
