@@ -21,8 +21,7 @@ return [
     MiddlewarePipelineInterface::class => fn() => new MiddlewarePipeline(),
     MiddlewareResolverInterface::class => fn(ContainerInterface $c) => new MiddlewareResolver($c),
     EmitterInterface::class => fn() => new SapiEmitter(),
-    RouterInterface::class => fn(ContainerInterface $c) 
-        => new Router($c->get(Matcher::class), $c->get(RouteFactory::class)),
+    RouterInterface::class => fn() => new Router(),
     Environment::class => function () {
         $loader = new FilesystemLoader('../app/views');
         return new Environment($loader);

@@ -12,15 +12,29 @@ class Router implements RouterInterface
     private ?array $reflect = null;
     public ?string $allowedMethods = null;
 
-    public function __construct(Matcher $matcher, RouteFactory $factory)
+    public function __construct(...$paths)
     {
-        $this->matcher = $matcher;
-        $this->factory = $factory;
+        if (!empty($paths)) {
+            $this->setPaths($paths);
+        }
+        
+        $this->matcher = new Matcher;
+        $this->factory = new RouteFactory;
     }
 
-    public function routes(array $routes): void
+    public function routes(array $routes): self
     {
         $this->routes = array_merge($this->routes, $routes);
+        return $this;
+    }
+
+    public function setPaths(...$paths): self
+    {
+        foreach ($paths as $path) {
+            $this->routes(require $path);
+        }
+
+        return $this;
     }
 
     public function path(string $name, array $params): string
