@@ -7,9 +7,9 @@
 {% if item.route == 'article' %}
 {% set margin = 'ms-16' %}
 {% endif %}
-<li class="{{ margin }}"><a href="{{ item.href }}" class="{{ active }}">
-
-        <div>{{ item.title }}</div>
-
-</a></li>
+<li class="{{ margin }}">
+    <a href="{{ item.href }}" class="{{ active }}">
+        {{ item.title }}
+    </a>
+</li>
 {% endmacro %}

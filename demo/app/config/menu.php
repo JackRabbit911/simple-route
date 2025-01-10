@@ -45,4 +45,16 @@ return [
         'title' => 'Missing file',
         'href'  => path('file', ['file' => 'uploads/no_file.jpg']),
     ],
+    [
+        'title' => '/about',
+        'href'  => path('about'),
+    ],
+    [
+        'title' => '/about/us',
+        'href'  => path('about', ['action' => 'us']),
+    ],
+    [
+        'title' => '/about/project  method: GET',
+        'href'  => path('about', ['action' => 'project']),
+    ],
 ];

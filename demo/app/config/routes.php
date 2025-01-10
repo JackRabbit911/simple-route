@@ -4,7 +4,6 @@ use App\Controller\SimpleController;
 use App\Controller\SimpleHandler;
 use App\FileResponse;
 use Az\Route\Route;
-use HttpSoft\Response\HtmlResponse;
 
 function isFile($route)
 {
@@ -21,4 +20,6 @@ return [
     'file'      => ['/file/{file}', 
                     #[Route(filter: 'isFile')] fn($file) => new FileResponse($file), 
                     ['file' => '.*']],
+    'about'     => ['/about/{action?}', SimpleController::class],
+    'about.post'=> ['/about/project', [SimpleController::class, 'save']], //method POST
 ];
