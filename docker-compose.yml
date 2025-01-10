@@ -1,0 +1,17 @@
+version: '3'
+
+networks:
+  backend:
+
+services:
+  httpd:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: httpd
+    ports:
+      - 80:80
+    volumes:
+      - ".:/var/www"
+    networks:
+      - backend
