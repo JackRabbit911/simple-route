@@ -2,6 +2,8 @@
 
 namespace Az\Route;
 
+use InvalidArgumentException;
+
 class Matcher
 {
     private const PLACEHOLDER = '~(?:\{([\w\-]+|[^{}\?]+\?)\})~';
@@ -49,7 +51,9 @@ class Matcher
             return $params[$parameter];
         }, $pattern);
 
-        return preg_replace('~\/{2,}~', '/', $path);
+        $path = preg_replace('~\/{2,}~', '/', $path);
+
+        return $path === '/' ? $path : rtrim($path, '/');
     }
 
     private function santizePattern(string $pattern, array $tokens)
