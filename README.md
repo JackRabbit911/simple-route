@@ -8,7 +8,7 @@ composer require alpha-zeta/simple-route
 ```
 
 ## Usage
-anywere, ../config/routes.php, for example:
+anywhere, ../config/routes.php, for example:
 ```php
 return [
     'home'      => ['/', fn() => new HtmlResponse('This is homepage')],
@@ -20,7 +20,7 @@ return [
 ]
 ```
 
-in PostPontroller.php:
+in PostController.php:
 ```php
 ...
 use Az\Route\Route;
@@ -31,11 +31,13 @@ public function save()
 }
 ```
 
-anywere, for example, in some middleware:
-```
+anywhere, for example, in middleware RouteBootstrap.php:
+```php
 ...
 use Az\Route\Router;
 ...
+
+class RouteBootstrap implements MiddlewareInterface
 
 public function __construct(RouterInterface $router)
 {
@@ -45,7 +47,15 @@ public function __construct(RouterInterface $router)
 public function process(ServerRequestInterface $request, RequestHandlerInterface $handler)
 {
     $this->router->routes(require '../config/routes.php');
-
+    $this->router->routes(require '../module/config/routes.php');
     return handler($request);
 }
+```
+
+Add middleware to end of pipeline:
+```php
+...
+$this->pipe(RouteBootstrap::class);
+$this->pipe(RouteMatch::class);
+$this->pipe(RouteDispatch::class);
 ```
