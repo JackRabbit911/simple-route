@@ -16,6 +16,36 @@ return [
     'auth'      => ['/auth/{action?}' Auth::class],
     'posts'     => ['/posts', [PostController::class, 'list']],
     'post'      => ['/post/{id}/{slug?}', PostController::class, ['slug' => '[\w-]*']],
-    'post.save' => ['/post/{id?}', [PostController::class, 'save']]
+    'post.save' => ['/post/{id?}', [PostController::class, 'save']],
 ]
+```
+
+in PostPontroller.php:
+```php
+...
+use Az\Route\Route;
+...
+#[Route(methods: 'post')]
+public function save()
+{
+}
+```
+
+anywere, for example, in some middleware:
+```
+...
+use Az\Route\Router;
+...
+
+public function __construct(RouterInterface $router)
+{
+    $this->router = $router;
+}
+
+public function process(ServerRequestInterface $request, RequestHandlerInterface $handler)
+{
+    $this->router->routes(require '../config/routes.php');
+
+    return handler($request);
+}
 ```
