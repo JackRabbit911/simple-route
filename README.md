@@ -63,6 +63,9 @@ $this->pipe(RouteDispatch::class);
   ```
   + Each route is named
   + The route can be applied to a function, anonymous function, method, or the entire controller
+  + {action} is reserved token name, means the name of a controller method
+  + Default controller method name is __invoke
+  + Default http request methods is ['HEAD', 'GET']
 
 * Fine-tuning of the route is done through attributes:
   ```php
@@ -81,3 +84,11 @@ $this->pipe(RouteDispatch::class);
     public function save($id = null)
   }
   ```
+  + methods - redefines request methods
+  + host - filter by $request->getHost() (default - no filter)
+  + ajax - filter by 'x_requested_with' header (default - no filter)
+  + filter - any named function or method, takes the route as the first parameter, and the request as the second  
+    ```php
+    function my_filter(Az\Route\Route $route, SrverRequestInterface $request): bool
+    ```
+    
