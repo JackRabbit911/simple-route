@@ -83,7 +83,7 @@ class Resolver
                 $action = $route->getHandler()[1];
                 $params = $route->getParameters();
 
-                return (method_exists($this->container, 'call')) 
+                return ($this->container && method_exists($this->container, 'call')) 
                     ? $this->container->call([$this->instance, $action], $params)
                     : call_user_func_array([$this->instance, $action], array_values($params));
             }
@@ -94,6 +94,10 @@ class Resolver
     {
         if (is_object($handler) || function_exists($handler)) {
             return $handler;
+        }
+
+        if (!$this->container) {
+            return new $handler;
         }
 
         if (method_exists($this->container, 'make')) {

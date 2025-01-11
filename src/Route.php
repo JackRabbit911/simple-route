@@ -2,6 +2,8 @@
 
 namespace Az\Route;
 
+use Psr\Container\ContainerInterface;
+
 class Route
 {
     private $handler;
@@ -99,5 +101,11 @@ class Route
     public function getFilters()
     {
         return $this->filters;
+    }
+
+    public function getInstance(?ContainerInterface $container = null)
+    {
+        $resolver = new Resolver($container);
+        return $resolver->resolve($this->handler);
     }
 }

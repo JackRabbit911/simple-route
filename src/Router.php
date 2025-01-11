@@ -12,8 +12,12 @@ class Router implements RouterInterface
     private ?array $reflect = null;
     public ?string $allowedMethods = null;
 
-    public function __construct(...$paths)
+    public function __construct(array|string $paths = null)
     {
+        if ($paths && is_string($paths)) {
+            $paths = [$paths];
+        }
+
         if (!empty($paths)) {
             $this->setPaths($paths);
         }
@@ -28,7 +32,7 @@ class Router implements RouterInterface
         return $this;
     }
 
-    public function setPaths(...$paths): self
+    public function setPaths($paths): self
     {
         foreach ($paths as $path) {
             $this->routes(require $path);
