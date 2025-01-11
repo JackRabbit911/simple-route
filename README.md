@@ -89,6 +89,13 @@ $this->pipe(RouteDispatch::class);
   + ajax - filter by 'x_requested_with' header (default - no filter)
   + filter - any named function or method, takes the route as the first parameter, and the request as the second  
     ```php
-    function my_filter(Az\Route\Route $route, SrverRequestInterface $request): bool
+    function my_filter(Az\Route\Route $route, ServerRequestInterface $request): bool
     ```
-    
+* Request handler (controller) may be:
+  ```php
+  - fn($arg) => new Request(...)
+  - function ($arg1, $arg2) {...}
+  - ClassName::class
+  - [ClassName::class, 'methodName']
+  - 'Ns\ClassName::methodName' or 'Ns\ClassName@methodName'
+  ```
