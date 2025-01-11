@@ -3,6 +3,7 @@
 use App\App;
 use DI\ContainerBuilder;
 
+chdir(__DIR__);
 require '../vendor/autoload.php';
 
 $containerBuilder = new ContainerBuilder();
