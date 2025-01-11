@@ -20,7 +20,7 @@ class RouteMatch implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (!($route = $this->router->match($request))) {
+        if (!$route = $this->router->match($request)) {
             if (!empty($this->router->allowedMethods)) {
                 $request = $request->withAttribute('status_code', 405)
                     ->withAttribute('headers', ['Allow' => $this->router->allowedMethods]);

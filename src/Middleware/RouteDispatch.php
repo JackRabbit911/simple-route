@@ -2,8 +2,8 @@
 
 namespace Az\Route\Middleware;
 
-use Az\Route\Resolver;
 use Az\Route\Route;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -11,23 +11,19 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class RouteDispatch implements MiddlewareInterface
 {
-    private Resolver $resolver;
+    private ContainerInterface $container;
 
-    public function __construct(Resolver $resolver)
+    public function __construct(ContainerInterface $container)
     {
-        $this->resolver = $resolver;
+        $this->container = $container;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (!$route = $request->getAttribute(Route::class)) {
-            return $handler->handle($request);
+        if ($route = $request->getAttribute(Route::class)) {
+            $handler = $route->getInstance($this->container);
         }
 
-        $routeHandler = $route->getHandler();
-        $instance = $this->resolver->resolve($routeHandler);
-        $response = $instance->handle($request);
-
-        return $response;
+        return $handler->handle($request);
     }
 }
