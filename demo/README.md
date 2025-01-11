@@ -7,13 +7,18 @@ Watch out, this project is meant to show how to how to embed simple-route librar
 ## Run
 To run this demo, you need install simle-route lidrary or clone this repository:
 ```
+mkdir <some_folder>
+
 composer require alpha-zeta/simple-route
 or
-git clone https://github.com/JackRabbit911/simple-route
+git clone https://github.com/JackRabbit911/simple-route .
+
+cd demo/
+composer install
 ```
 You can then run the web application using PHP's built-in server:
 ```
-php -S 0.0.0.0:8000 -t demo/public/ demo/public/router.php
+php -S 0.0.0.0:8000 -t public/ public/router.php
 ```
 The web application is running at http://localhost:8000.
 
