@@ -39,6 +39,7 @@ In the dependency container:
 ```php
 ...
 use Az\Route\RouterInterface;
+use Az\Route\Route;
 ...
 
 return [
@@ -51,17 +52,19 @@ return [
 Add middleware to end of pipeline:
 ```php
 ...
-$this->pipe(RouteBootstrap::class);
 $this->pipe(RouteMatch::class);
 $this->pipe(RouteDispatch::class);
 ```
 ## Features
-- Very simple record for route: 
+* Very simple record for route: 
   ```php
   'name' => [pattern, handler, tokens],   
   'auth' => ['/auth/{action?}', Auth::class]
   ```
-- Fine-tuning of the route is done through attributes:
+  + Each route is named
+  + The route can be applied to a function, anonymous function, method, or the entire controller
+
+* Fine-tuning of the route is done through attributes:
   ```php
   ...
   use Az\Route\Route;
