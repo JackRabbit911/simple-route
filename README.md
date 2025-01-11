@@ -66,6 +66,7 @@ $this->pipe(RouteDispatch::class);
   + {action} is reserved token name, means the name of a controller method
   + Default controller method name is __invoke
   + Default http request methods is ['HEAD', 'GET']
+  + The delimeters me be any valid character
 
 * Fine-tuning of the route is done through attributes:
   ```php
@@ -84,6 +85,7 @@ $this->pipe(RouteDispatch::class);
     public function save($id = null)
   }
   ```
+  + tokens - redefines default token: '\w*'
   + methods - redefines request methods
   + host - filter by $request->getHost() (default - no filter)
   + ajax - filter by 'x_requested_with' header (default - no filter)
@@ -91,11 +93,16 @@ $this->pipe(RouteDispatch::class);
     ```php
     function my_filter(Az\Route\Route $route, ServerRequestInterface $request): bool
     ```
-* Request handler (controller) may be:
+* Request handler (controller) record may be:
   ```php
   - fn($arg) => new Request(...)
   - function ($arg1, $arg2) {...}
   - ClassName::class
   - [ClassName::class, 'methodName']
   - 'Ns\ClassName::methodName' or 'Ns\ClassName@methodName'
+  - $instance or [$instance, 'methodName']
   ```
+  Before invoke the controller is wrapped in class implements RequestHandleInterface. 
+  Therefore, we recommend using a controller that implements the RequestHandlerInterface right away
+* Router does not create instances of the Route class until match pattern and uri. 
+This saves memory and time.
