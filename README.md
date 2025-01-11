@@ -20,21 +20,11 @@ return [
 ]
 ```
 
-in PostController.php:
-```php
-...
-use Az\Route\Route;
-...
-#[Route(methods: 'post')]
-public function save()
-{
-}
-```
 anywhere:
 ```php
 use Az\Route\Router;
 ...
-$router = new Router('../config/routes.php', '../module/routes.php');
+$router = new Router(['../config/routes.php', '../module/routes.php']);
 
 if (!$route = $this->router->match($request)) {
     //abort(404)
@@ -53,30 +43,9 @@ use Az\Route\RouterInterface;
 
 return [
     ...
-    RouterInterface::class => fn() => new Router(),
+    RouterInterface::class => fn() => new Router('../config/routes.php'),
     ...
 ]
-```
-
-anywhere, for example, in middleware RouteBootstrap.php:
-```php
-...
-use Az\Route\RouterInterface;
-...
-
-class RouteBootstrap implements MiddlewareInterface
-
-public function __construct(RouterInterface $router)
-{
-    $this->router = $router;
-}
-
-public function process(ServerRequestInterface $request, RequestHandlerInterface $handler)
-{
-    $this->router->routes(require '../config/routes.php');
-    $this->router->routes(require '../module/config/routes.php');
-    return handler($request);
-}
 ```
 
 Add middleware to end of pipeline:
@@ -89,7 +58,8 @@ $this->pipe(RouteDispatch::class);
 ## Features
 - Very simple record for route: 
   ```php
-  'name' => [pattern, handler, tokens],
+  'name' => [pattern, handler, tokens],   
+  'auth' => ['/auth/{action?}', Auth::class]
   ```
 - Fine-tuning of the route is done through attributes:
   ```php
@@ -101,10 +71,10 @@ $this->pipe(RouteDispatch::class);
   class ClassName
   {
     #[Route(filter: 'some_function')]
-    #[Route(ajax: false, tokens: '\d+')]
+    #[Route(ajax: false, tokens: ['id' => '\d+'])]
     public function show($id)
 
-    #[Route(methods: 'post')]
+    #[Route(methods: ['post', 'patch'])]
     public function save($id = null)
   }
   ```
