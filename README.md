@@ -104,5 +104,7 @@ $this->pipe(RouteDispatch::class);
   ```
   Before invoke the controller is wrapped in class implements RequestHandleInterface. 
   Therefore, we recommend using a controller that implements the RequestHandlerInterface right away
-* Router does not create instances of the Route class until match pattern and uri. 
-This saves memory and time.
+* Router does not create instances of the Route class until match pattern and uri. This saves memory and time.
+
+### Happy use for You!
+Try the [demo](https://github.com/JackRabbit911/simple-route/tree/master/demo) for get more examples
