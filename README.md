@@ -85,7 +85,7 @@ $this->pipe(RouteDispatch::class);
     public function save($id = null)
   }
   ```
-  + tokens - redefines default token: '\w*'
+  + tokens - redefines default token: `'\w*'`
   + methods - redefines request methods
   + host - filter by $request->getHost() (default - no filter)
   + ajax - filter by 'x_requested_with' header (default - no filter)
