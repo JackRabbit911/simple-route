@@ -100,10 +100,6 @@ class Resolver
             return new $handler;
         }
 
-        if (method_exists($this->container, 'make')) {
-            return $this->container->make($handler);
-        }
-
         return $this->container->get($handler);
     }
 }
