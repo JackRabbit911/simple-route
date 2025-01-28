@@ -34,8 +34,10 @@ class Router implements RouterInterface
 
     public function setPaths($paths): self
     {
-        foreach ($paths as $path) {
-            $this->routes(require $path);
+        foreach ($paths as $file) {
+            if (is_file($file)) {
+                $this->routes(require $file);
+            }
         }
 
         return $this;
