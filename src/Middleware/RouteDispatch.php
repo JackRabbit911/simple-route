@@ -21,7 +21,13 @@ class RouteDispatch implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($route = $request->getAttribute(Route::class)) {
-            $handler = $route->getInstance($this->container);
+            $instance = $route->getInstance($this->container);
+        }
+        
+        if (isset($instance)) {
+            return ($instance instanceof MiddlewareInterface)
+                    ? $instance->process($request, $handler)
+                    : $instance->handle($request);
         }
 
         return $handler->handle($request);
