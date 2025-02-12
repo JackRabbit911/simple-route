@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Container\ContainerInterface;
 use Closure;
+use Psr\Http\Server\MiddlewareInterface;
 
 class Resolver
 {
@@ -62,7 +63,7 @@ class Resolver
     {
         $instance = $this->getInstance($handler[0]);
 
-        if ($instance instanceof RequestHandlerInterface) {
+        if ($instance instanceof RequestHandlerInterface || $instance instanceof MiddlewareInterface) {
             return $instance;
         }
 
