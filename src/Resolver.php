@@ -52,9 +52,12 @@ class Resolver
                 $route = $request->getAttribute(Route::class);
                 $params = array_merge(['request' => $request], $route->getParameters());
 
-                return (method_exists($this->container, 'call')) 
+                $response = (method_exists($this->container, 'call')) 
                     ? $this->container->call($this->func, $params)
                     : call_user_func_array($this->func, array_values($params));
+
+                return ($response instanceof ResponseInterface)
+                    ? $response : new HtmlResponse($response);
             }
         };
     }
