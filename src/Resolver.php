@@ -3,12 +3,13 @@
 namespace Az\Route;
 
 use Az\Route\Route;
+use HttpSoft\Response\HtmlResponse;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Container\ContainerInterface;
-use Closure;
 use Psr\Http\Server\MiddlewareInterface;
+use Closure;
 
 class Resolver
 {
