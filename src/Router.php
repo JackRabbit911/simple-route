@@ -12,7 +12,7 @@ class Router implements RouterInterface
     private ?array $reflect = null;
     public ?string $allowedMethods = null;
 
-    public function __construct(array|string $paths = null)
+    public function __construct(array|string|null $paths = null)
     {
         if ($paths && is_string($paths)) {
             $paths = [$paths];
