@@ -43,7 +43,7 @@ class Router implements RouterInterface
         return $this;
     }
 
-    public function path(string $name, array $params): string
+    public function path(string $name, array $params = []): string
     {
         $pattern = $this->routes[$name][0];
         return $this->matcher->path($name, $pattern, $params);
