@@ -89,17 +89,17 @@ class Route
         return $this->handler;
     }
 
-    public function getMethods()
+    public function getMethods(): array
     {
         return $this->methods;
     }
 
-    public function getHost()
+    public function getHost(): ?string
     {
         return $this->host;
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         return $this->filters;
     }
@@ -113,7 +113,7 @@ class Route
         $this->reflect = $reflect;
     }
 
-    public function getInstance(?ContainerInterface $container = null)
+    public function getInstance(?ContainerInterface $container = null): mixed
     {
         $resolver = new Resolver($container);
         return $resolver->resolve($this->handler);

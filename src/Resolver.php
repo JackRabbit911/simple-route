@@ -35,7 +35,7 @@ class Resolver
         }
     }
 
-    private function func($handler)
+    private function func($handler): RequestHandlerInterface
     {
         return new class ($handler, $this->container) implements RequestHandlerInterface
         {
@@ -63,7 +63,7 @@ class Resolver
         };
     }
 
-    private function array(array $handler)
+    private function array(array $handler): RequestHandlerInterface|MiddlewareInterface
     {
         $instance = $this->getInstance($handler[0]);
 
@@ -95,7 +95,7 @@ class Resolver
         };
     }
 
-    private function getInstance($handler)
+    private function getInstance($handler): mixed
     {
         if (is_object($handler) || function_exists($handler)) {
             return $handler;
