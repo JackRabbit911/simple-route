@@ -12,18 +12,19 @@ class RouteFactory
 {
     private array $reflect = [];
 
-    public function create($handler, $tokens)
+    public function create(mixed $handler, array $tokens, array $parameters): Route
     {
         $route = new Route($handler, $tokens);
         $route->methods('get');
+        $route->setParameters($parameters);
+        $route->reflect($this->reflect);
         
-        $attributes = $this->attributes();
-        $this->setByAttribute($route, $attributes);
+        $this->setByAttribute($route, $this->attributes());
 
         return $route;
     }
 
-    public function handler($handler, $parameters)
+    public function handler(mixed $handler, array $parameters): mixed
     {
         if (is_string($handler)) {
             if (function_exists($handler)) {
@@ -49,7 +50,7 @@ class RouteFactory
         return $handler;
     }
 
-    public function reflect($handler)
+    public function reflect(mixed $handler)
     {
         if (is_array($handler) && method_exists($handler[0], $handler[1])) {
             $this->reflect['class'] = (is_object($handler[0])) 
@@ -65,7 +66,7 @@ class RouteFactory
         return $this->reflect;
     }
 
-    public function attributes()
+    public function attributes(): array
     {
         $attributes = [];
 
@@ -76,7 +77,7 @@ class RouteFactory
         return $attributes;
     }
 
-    private function setByAttribute($route, $attributes)
+    private function setByAttribute(Route $route, array $attributes): void
     {   
         foreach ($attributes as $attribute) {
             $arguments = $attribute->getArguments();

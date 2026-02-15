@@ -13,14 +13,15 @@ class Route
     private array $parameters = [];
     private array $filters = [];
     private ?bool $ajax = null;
+    private array $reflect = [];
 
-    public function __construct($handler, $tokens)
+    public function __construct(mixed $handler, array $tokens)
     {
         $this->handler = $handler;
         $this->tokens($tokens);
     }
 
-    public function methods($methods)
+    public function methods(array|string $methods)
     {
         if (is_string($methods)) {
             $methods = [$methods];
@@ -44,7 +45,7 @@ class Route
         return $this;
     }
 
-    public function host($host): self
+    public function host(string $host): self
     {
         $this->host = $host;
         return $this;
@@ -72,7 +73,7 @@ class Route
         return $this->tokens;
     }
 
-    public function setParameters($params)
+    public function setParameters(array $params)
     {
         $this->parameters = array_replace($this->parameters, array_filter($params));
         unset($this->parameters['action']);
@@ -88,22 +89,31 @@ class Route
         return $this->handler;
     }
 
-    public function getMethods()
+    public function getMethods(): array
     {
         return $this->methods;
     }
 
-    public function getHost()
+    public function getHost(): ?string
     {
         return $this->host;
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         return $this->filters;
     }
 
-    public function getInstance(?ContainerInterface $container = null)
+    public function reflect(?array $reflect = null)
+    {
+        if (!$reflect) {
+            return $this->reflect;
+        }
+
+        $this->reflect = $reflect;
+    }
+
+    public function getInstance(?ContainerInterface $container = null): mixed
     {
         $resolver = new Resolver($container);
         return $resolver->resolve($this->handler);
