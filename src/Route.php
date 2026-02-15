@@ -13,6 +13,7 @@ class Route
     private array $parameters = [];
     private array $filters = [];
     private ?bool $ajax = null;
+    private array $reflect = [];
 
     public function __construct(mixed $handler, array $tokens)
     {
@@ -101,6 +102,15 @@ class Route
     public function getFilters()
     {
         return $this->filters;
+    }
+
+    public function reflect(?array $reflect = null)
+    {
+        if (!$reflect) {
+            return $this->reflect;
+        }
+
+        $this->reflect = $reflect;
     }
 
     public function getInstance(?ContainerInterface $container = null)
