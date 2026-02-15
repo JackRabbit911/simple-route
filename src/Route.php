@@ -14,13 +14,13 @@ class Route
     private array $filters = [];
     private ?bool $ajax = null;
 
-    public function __construct($handler, $tokens)
+    public function __construct(mixed $handler, array $tokens)
     {
         $this->handler = $handler;
         $this->tokens($tokens);
     }
 
-    public function methods($methods)
+    public function methods(array|string $methods)
     {
         if (is_string($methods)) {
             $methods = [$methods];
@@ -44,7 +44,7 @@ class Route
         return $this;
     }
 
-    public function host($host): self
+    public function host(string $host): self
     {
         $this->host = $host;
         return $this;
@@ -72,7 +72,7 @@ class Route
         return $this->tokens;
     }
 
-    public function setParameters($params)
+    public function setParameters(array $params)
     {
         $this->parameters = array_replace($this->parameters, array_filter($params));
         unset($this->parameters['action']);
