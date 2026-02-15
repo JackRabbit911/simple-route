@@ -29,7 +29,6 @@ class RouteMatch implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        return $handler->handle($request->withAttribute(Route::class, $route)
-            ->withAttribute('reflect', $this->router->getReflect()));
+        return $handler->handle($request->withAttribute(Route::class, $route));
     }
 }
