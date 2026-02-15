@@ -9,7 +9,6 @@ class Router implements RouterInterface
     private Matcher $matcher;
     private RouteFactory $factory;
     private array $routes = [];
-    private ?array $reflect = null;
     public ?string $allowedMethods = null;
 
     public function __construct(array|string|null $paths = null)
@@ -49,11 +48,6 @@ class Router implements RouterInterface
         return $this->matcher->path($name, $pattern, $params);
     }
 
-    public function getReflect()
-    {
-        return $this->reflect;
-    }
-
     public function match(ServerRequestInterface $request): mixed
     {
         $path = $request->getUri()->getPath();
@@ -66,15 +60,13 @@ class Router implements RouterInterface
 
             if ($params !== false) {
                 $handler = $this->factory->handler($handler, $params);
-                $this->reflect = $this->factory->reflect($handler);
+                $reflect = $this->factory->reflect($handler);
                 
-                if (!$this->reflect) {
+                if (!$reflect) {
                     continue;
                 }
                 
-                $route = $this->factory->create($handler, $tokens);
-                $route->setParameters($params);
-
+                $route = $this->factory->create($handler, $tokens, $params);
                 $route = $this->check($route, $request);
 
                 if (!$route) {
