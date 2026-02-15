@@ -12,7 +12,7 @@ class RouteFactory
 {
     private array $reflect = [];
 
-    public function create($handler, $tokens)
+    public function create($handler, array $tokens)
     {
         $route = new Route($handler, $tokens);
         $route->methods('get');
@@ -23,7 +23,7 @@ class RouteFactory
         return $route;
     }
 
-    public function handler($handler, $parameters)
+    public function handler(mixed $handler, array $parameters): mixed
     {
         if (is_string($handler)) {
             if (function_exists($handler)) {
