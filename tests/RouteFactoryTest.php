@@ -34,7 +34,7 @@ final class RouteFactoryTest extends TestCase
 
     public function testCreate()
     {
-        $route = $this->factory->create([Controller::class, 'index'], []);
+        $route = $this->factory->create([Controller::class, 'index'], [], []);
         $this->assertInstanceOf(Route::class, $route);
     }
 
