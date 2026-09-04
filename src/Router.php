@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Az\Route;
 
@@ -8,14 +6,41 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Router implements RouterInterface
 {
+    private Matcher $matcher;
+    private RouteFactory $factory;
     private array $routes = [];
     public ?string $allowedMethods = null;
 
-    public function __construct(
-        private Matcher $matcher,
-        private RouteFactory $factory,
-        private string|array $routePaths,
-    ) {}
+    public function __construct(array|string|null $paths = null)
+    {
+        if ($paths && is_string($paths)) {
+            $paths = [$paths];
+        }
+
+        if (!empty($paths)) {
+            $this->setPaths($paths);
+        }
+        
+        $this->matcher = new Matcher;
+        $this->factory = new RouteFactory;
+    }
+
+    public function routes(array $routes): self
+    {
+        $this->routes = array_merge($this->routes, $routes);
+        return $this;
+    }
+
+    public function setPaths($paths): self
+    {
+        foreach ($paths as $file) {
+            if (is_file($file)) {
+                $this->routes(require $file);
+            }
+        }
+
+        return $this;
+    }
 
     public function path(string $name, array $params = []): string
     {
@@ -25,8 +50,6 @@ class Router implements RouterInterface
 
     public function match(ServerRequestInterface $request): mixed
     {
-        $this->setPaths();
-
         $path = $request->getUri()->getPath();
 
         foreach ($this->routes as $name => $item) {
@@ -38,40 +61,23 @@ class Router implements RouterInterface
             if ($params !== false) {
                 $handler = $this->factory->handler($handler, $params);
                 $reflect = $this->factory->reflect($handler);
-
+                
                 if (!$reflect) {
                     continue;
                 }
-
+                
                 $route = $this->factory->create($handler, $tokens, $params);
                 $route = $this->check($route, $request);
 
                 if (!$route) {
                     continue;
                 }
-
+                
                 return $route;
             }
         }
 
         return false;
-    }
-
-    private function setPaths()
-    {
-        if (is_callable($this->routePaths)) {
-            $paths = call_user_func($this->routePaths);
-        } elseif (is_string($this->routePaths)) {
-            $paths = [$this->routePaths];
-        } else {
-            $paths = $this->routePaths;
-        }
-
-        foreach ($paths as $file) {
-            if (is_file($file)) {
-                $this->routes = array_merge($this->routes, require $file);
-            }
-        }
     }
 
     private function check($route, $request)
@@ -96,9 +102,9 @@ class Router implements RouterInterface
             return false;
         }
 
-        if ($host && !preg_match('~^'
-            . str_replace('.', '\\.', $host)
-            . '$~i', $request->getUri()->getHost())) {
+        if ($host && !preg_match('~^' 
+                . str_replace('.', '\\.', $host) 
+                . '$~i', $request->getUri()->getHost())) {
             return false;
         }
 
